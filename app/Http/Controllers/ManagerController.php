@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manager;
-use App\Traits\Images;
-use App\Traits\responseJson;
+use App\Traits\ImagesTrait;
+use App\Traits\responseJsonTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class ManagerController extends Controller
 {
-    use responseJson;
-    use Images;
+    use responseJsonTrait;
+    use ImagesTrait;
     /**
      * Display a listing of the resource.
      */
@@ -34,20 +34,25 @@ class ManagerController extends Controller
     public function store(Request $request)
     {
         try {
+            $manager_file = ''; // مشان اقدر اخزن الصورة لازم اعرف المتغير بالاول هون بهالشكل
+            if ($request->hasFile('photo'))
+            {
+                $manager_file = $this->uploadFile($request->photo, 'manager');
+            }
             Manager::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'photo' => $request->photo,
+                'photo' => $manager_file,
             ]);
 
-            return response()->json(['success' => 'Data stored successfully'], 200);
+            return $this->success('data has been submitted sucssessfully', 200);
 
         }
         catch (\Exception $e){
-            return response()->json(['error'=>$e->getMessage()],500);
+            return $this->fail($e->getMessage(), 501);
         }
 
     }

@@ -10,4 +10,6 @@ class Manager extends Model
     use HasFactory;
 
     protected $fillable = ['name','email','password','phone','address','photo'];
+
+    protected $hidden = ['password'];
 }

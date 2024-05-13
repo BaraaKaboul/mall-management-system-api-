@@ -17,7 +17,14 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        return 'hello its me you looking for';
+        try {
+
+            $manager_data = Manager::all();
+            return $this->fetchData('your data has been fetched',200,'data',$manager_data);
+        }
+        catch (\Exception $e){
+            return $this->fail($e->getMessage(),400);
+        }
     }
 
     /**
@@ -73,7 +80,17 @@ class ManagerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $manager_data = Manager::find($id);
+            if (!isset($manager_data))
+            {
+                return $this->fail('there is no data received',202);
+            }
+            return $this->fetchData('your data has been fetched for one user',200,'data',$manager_data);
+        }
+        catch (\Exception $e){
+            return $this->fail($e->getMessage(),400);
+        }
     }
 
     /**

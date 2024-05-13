@@ -7,6 +7,7 @@ use App\Traits\ImagesTrait;
 use App\Traits\responseJsonTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ManagerController extends Controller
 {
@@ -66,7 +67,7 @@ class ManagerController extends Controller
                 ]);
 
 
-            return $this->success('data has been submitted sucssessfully', 201);
+            return $this->success('data has been submitted successfully', 201);
 
         }
         catch (\Exception $e){
@@ -106,9 +107,37 @@ class ManagerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        try {
+            $manager = Manager::find($id);
+            if (!$manager) {
+                return $this->fail('Manager not found', 404);
+            }
 
+            if ($request->hasFile('photo')) {
+                $imagePath = $manager->photo;
+                if ($imagePath) {
+                    Storage::delete($imagePath);
+                }
+                $image = $this->uploadFile($request, 'manager');
+                $manager->photo = $image;
+            }
+
+            $manager->name = $request->name;
+            $manager->email = $request->email;
+            $manager->phone = $request->phone;
+            $manager->address = $request->address;
+
+            if ($request->has('password')) {
+                $manager->password = Hash::make($request->password);
+            }
+
+            $manager->save();
+
+            return $this->success('Manager updated successfully', 200);
+        } catch (\Exception $e) {
+            return $this->fail($e->getMessage(), 400);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */

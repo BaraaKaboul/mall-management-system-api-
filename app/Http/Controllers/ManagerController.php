@@ -34,25 +34,36 @@ class ManagerController extends Controller
     public function store(Request $request)
     {
         try {
-            $manager_file = ''; // مشان اقدر اخزن الصورة لازم اعرف المتغير بالاول هون بهالشكل
             if ($request->hasFile('photo'))
             {
-                $manager_file = $this->uploadFile($request->photo, 'manager');
+                $image = $this->uploadFile($request, 'manager');
             }
-            Manager::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'photo' => $manager_file,
-            ]);
+            if (isset($image)){
+                Manager::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'photo' => $image,
+                ]);
+            }
+            else
+                Manager::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'photo' => null,
+                ]);
 
-            return $this->success('data has been submitted sucssessfully', 200);
+
+            return $this->success('data has been submitted sucssessfully', 201);
 
         }
         catch (\Exception $e){
-            return $this->fail($e->getMessage(), 501);
+            return $this->fail($e->getMessage(), 400);
         }
 
     }

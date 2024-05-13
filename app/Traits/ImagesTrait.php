@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 
 trait ImagesTrait
 {
-    public function uploadFile($photo, $folder)
+    public function uploadFile($request, $disk)
     {
-        $photo->store('/', $folder);
-        $fileName = $photo->hashName();
-         $path = 'images/' . $folder . '/' . $fileName;
-        return $fileName;
+
+
+            $imageName = time() . '.' . $request->photo->getClientOriginalName();
+            $request->file('photo')->storeAs($disk,$imageName);
+            return $imageName;
+
     }
 }

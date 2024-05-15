@@ -143,6 +143,19 @@ class ManagerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $manager = Manager::find($id);
+            if (!$manager)
+            {
+                return $this->fail('Manager not found', 404);
+            }
+            $manager->destroy($id);
+
+            return $this->success('Manager has been deleted successfully', 200);
+
+        } catch (\Exception $e) {
+            return $this->fail($e->getMessage(), 400);
+        }
+
     }
 }

@@ -7,8 +7,8 @@ trait responseJsonTrait
     public function success($msg, $code)
     {
         return response()->json([
-            $msg,
-            $code,
+            'msg'=>$msg,
+            'code'=>$code,
         ]);
     }
 

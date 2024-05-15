@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mall;
 use App\Models\Manager;
 use App\Traits\ImagesTrait;
 use App\Traits\responseJsonTrait;
@@ -148,6 +149,10 @@ class ManagerController extends Controller
     {
         try {
             $manager = Manager::find($id);
+            if (Mall::where('manager_id','=',$id)->exists())
+            {
+                return $this->fail("Can't delete Manager because it's related with another table, please delete related data first", 202);
+            }
             if (!$manager)
             {
                 return $this->fail('Manager not found', 404);

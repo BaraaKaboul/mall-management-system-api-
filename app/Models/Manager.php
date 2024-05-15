@@ -18,4 +18,7 @@ class Manager extends Model
 //        $actual_link = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
 //        return ($value == null ? '' : $actual_link . 'images/managers/' . $value);
 //    }
+    public function mall(){
+        return $this->hasMany(Mall::class,'manager_id');
+    }
 }

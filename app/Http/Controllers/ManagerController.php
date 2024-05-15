@@ -21,6 +21,9 @@ class ManagerController extends Controller
         try {
 
             $manager_data = Manager::all();
+            if (!$manager_data){
+                return $this->fail('there is no data received',202);
+            }
             return $this->fetchData('your data has been fetched',200,'data',$manager_data);
         }
         catch (\Exception $e){
@@ -82,7 +85,7 @@ class ManagerController extends Controller
     public function show(string $id)
     {
         try {
-            $manager_data = Manager::find($id);
+            $manager_data = Manager::with('mall')->find($id);
             if (!isset($manager_data))
             {
                 return $this->fail('there is no data received',202);

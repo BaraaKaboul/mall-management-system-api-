@@ -16,4 +16,7 @@ class Mall extends Model
 
         return $this->belongsTo(Manager::class,'manager_id','id');
     }
+    public function department(){
+        return $this->hasMany(Department::class,'mall_id');
+    }
 }

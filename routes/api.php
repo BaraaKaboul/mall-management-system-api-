@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MallController;
 use App\Http\Controllers\ManagerController;
 use Illuminate\Http\Request;
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('/manager', ManagerController::class);
 Route::resource('/mall', MallController::class);
+Route::resource('/department', DepartmentController::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Mall;
 use App\Models\Manager;
 use App\Traits\ImagesTrait;
@@ -91,7 +92,7 @@ class MallController extends Controller
 
             if ($mall) {
 
-                $manager_data = Mall::with('manager')->find($mall);
+                $manager_data = Mall::with(['manager','department'])->find($mall);
 
                 if ($manager_data->isNotEmpty()) {
                     return $this->fetchData('your data has been fetched', 200, 'data', $manager_data);
@@ -158,6 +159,10 @@ class MallController extends Controller
     {
         try {
             $mall = Mall::find($mall_id);
+            if (Department::where('mall_id','=',$mall_id)->exists())
+            {
+                return $this->fail("Can't delete Mall because it's related with another table, please delete related data first", 202);
+            }
             if (!$mall)
             {
                 return $this->fail('Mall not found', 404);

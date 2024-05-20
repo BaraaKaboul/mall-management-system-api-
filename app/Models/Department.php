@@ -15,4 +15,9 @@ class Department extends Model
     public function mall(){
         return $this->belongsTo(Mall::class,'mall_id');
     }
+
+    public function vendor(){
+
+        return $this->hasMany(Vendor::class,'department_id');
+    }
 }

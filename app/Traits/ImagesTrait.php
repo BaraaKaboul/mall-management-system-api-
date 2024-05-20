@@ -8,11 +8,10 @@ trait ImagesTrait
 {
     public function uploadFile($request, $disk)
     {
-
-
-            $imageName = time() . '.' . $request->photo->getClientOriginalName();
-            $request->file('photo')->storeAs($disk,$imageName);
+        $file = $request->file('photo');
+            $imageName = time() . '.' . $file->getClientOriginalName();
+            $file->storeAs($disk, $imageName);
             return $imageName;
+        }
 
-    }
 }

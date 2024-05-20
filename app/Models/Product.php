@@ -10,4 +10,9 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['name','description','manufacture_company','photo'];
+
+    public function vendor()
+    {
+        return $this->belongsToMany(Vendor::class,'vendors_products','product_id');
+    }
 }

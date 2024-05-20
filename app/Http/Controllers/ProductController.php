@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         try {
 
-            $product_data = Product::all();
+            $product_data = Product::with('vendor')->get();
             if (!$product_data){
                 return $this->fail('there is no data received',202);
             }

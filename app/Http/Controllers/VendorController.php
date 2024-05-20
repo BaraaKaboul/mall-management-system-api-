@@ -19,7 +19,9 @@ class VendorController extends Controller
         try {
             $vendor_data = Vendor::with(['department'=>function($q){
                 $q->select('id','mall_id','name','description','note');
-            }])->get();
+            }])
+                ->with('product')
+                ->get();
             if (!$vendor_data)
             {
                 return $this->fail('there is no data received',202);

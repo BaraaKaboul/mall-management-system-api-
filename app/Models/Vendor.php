@@ -16,4 +16,9 @@ class Vendor extends Model
 
         return $this->belongsTo(Department::class,'department_id');
     }
+
+    public function product()
+    {
+        return $this->belongsToMany(Product::class,'vendors_products','vendor_id');
+    }
 }

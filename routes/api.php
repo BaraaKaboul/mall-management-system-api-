@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MallController;
 use App\Http\Controllers\ManagerController;
@@ -24,10 +25,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/manager', ManagerController::class);
-Route::resource('/mall', MallController::class);
-Route::resource('/department', DepartmentController::class);
-Route::resource('/vendor', VendorController::class);
-Route::resource('/product', ProductController::class);
+Route::group(['middleware'=>'auth:sanctum'],function (){
+    Route::resource('/manager', ManagerController::class);
+    Route::resource('/mall', MallController::class);
+    Route::resource('/department', DepartmentController::class);
+    Route::resource('/vendor', VendorController::class);
+    Route::resource('/product', ProductController::class);
 
-Route::post('/create-vendor-product',[VendorProductController::class,'store']);
+    Route::post('/create-vendor-product',[VendorProductController::class,'store']);
+});
+
+
+Route::post('/login',[AuthController::class,'login']);

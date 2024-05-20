@@ -3,6 +3,7 @@
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MallController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,4 @@ Route::resource('/manager', ManagerController::class);
 Route::resource('/mall', MallController::class);
 Route::resource('/department', DepartmentController::class);
 Route::resource('/vendor', VendorController::class);
+Route::resource('/product', ProductController::class);

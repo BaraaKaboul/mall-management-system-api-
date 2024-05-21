@@ -27,4 +27,30 @@ class AuthController extends Controller
         ];
         return $this->fetchData('You have been authenticated successfully',200,'data',$data);
     }
+
+    public function register(Request $request)
+    {
+        try {
+            $checkUser = User::where('email',$request->email)->first();
+
+            if ($checkUser)
+            {
+                return response()->json([
+                    'msg' => 'this email is already taken',
+                    'code' => 203,
+                ]);
+            }
+            User::create([
+                'email'=>$request->email,
+                'password'=>Hash::make($request->password),
+                'name'=>$request->name,
+            ]);
+
+            return $this->success('Account has been created successfully', 200);
+
+        }
+        catch (\Exception $e) {
+            return $this->fail($e->getMessage(), 400);
+        }
+    }
 }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Traits\responseJsonTrait;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -52,5 +54,24 @@ class AuthController extends Controller
         catch (\Exception $e) {
             return $this->fail($e->getMessage(), 400);
         }
+    }
+
+    public function logout(){
+        $user = Auth::guard('sanctum')->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        try {
+            // Revoke all tokens for the authenticated user
+            $user->tokens()->delete();
+        } catch (\Exception $e) {
+
+            return response()->json(['error' => 'Unable to delete tokens'], 500);
+        }
+
+        return response()->json(['message' => 'Tokens deleted successfully']);
+
     }
 }
